@@ -6,28 +6,25 @@
 package ur_os;
 
 /**
- *
  * @author super
  */
 public class UR_OS {
 
-    private static String VERSION = "0.0.3.9";
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        System.out.println("************************************");
-        System.out.println("         UR_OS V."+VERSION);
-        System.out.println("************************************");
+  private static String VERSION = "0.0.3.9";
 
-        boolean menu = false;
-        SystemOS system = new SystemOS(menu);
-        
-        new Thread(system).start();
-        
-    }
-    
+  /**
+   * @param args the command line arguments
+   */
+  public static void main(String[] args) {
+    // TODO code application logic here
+
+    System.out.println("************************************");
+    System.out.println("         UR_OS V." + VERSION);
+    System.out.println("************************************");
+
+    boolean menu = false;
+    SystemOS system = new SystemOS(menu);
+
+    new Thread(system).start();
+  }
 }
