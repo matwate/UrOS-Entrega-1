@@ -128,6 +128,24 @@ public class ProcessBurstList {
         
         return tot;
     }
+
+    public int getRemainingCPUTime() {
+        int remaining = 0;
+        
+        // Add remaining time from current burst if it's a CPU burst
+        if (currentBurst < bursts.size() && bursts.get(currentBurst).getType() == ProcessBurstType.CPU) {
+            remaining += bursts.get(currentBurst).getRemainingCycles();
+        }
+        
+        // Add time from all future CPU bursts
+        for (int i = currentBurst + 1; i < bursts.size(); i++) {
+            if (bursts.get(i).getType() == ProcessBurstType.CPU) {
+                remaining += bursts.get(i).getCycles();
+            }
+        }
+        
+        return remaining;
+    }
     
     public String toString(){
        StringBuilder sb = new StringBuilder();

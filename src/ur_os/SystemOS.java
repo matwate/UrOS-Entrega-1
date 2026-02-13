@@ -481,12 +481,13 @@ public final class SystemOS implements Runnable {
 
   public double calcAvgWaitingTime() {
 
-    int finishTimeSum = 0;
+    double totalWaitingTime = 0;
     for (Process proc : this.processes) {
-      finishTimeSum += proc.getTime_finished();
+      int turnaround = proc.getTime_finished() - proc.getTime_init();
+      int burstTime = proc.getTotalExecutionTime();
+      totalWaitingTime += (turnaround - burstTime);
     }
-
-    return (double) (finishTimeSum - this.clock) / this.processes.size();
+    return totalWaitingTime / this.processes.size();
   }
 
   // Everytime a process is taken out from memory, when a interruption occurs

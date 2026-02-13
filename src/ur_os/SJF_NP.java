@@ -17,16 +17,20 @@ public class SJF_NP extends Scheduler {
   public void getNext(boolean cpuEmpty) {
     if (cpuEmpty && !processes.isEmpty()) {
       Process shortest = processes.get(0);
+
+      // Find the process with the shortest remaining CPU time
       for (Process p : processes) {
-        if (p.getBurstTime() < shortest.getBurstTime()
-            || (p.getBurstTime() == shortest.getBurstTime() && tieBreaker(p, shortest) == p)) {
+        int pRemaining = p.getRemainingCPUTime();
+        int shortestRemaining = shortest.getRemainingCPUTime();
+
+        if (pRemaining < shortestRemaining
+            || (pRemaining == shortestRemaining && tieBreaker(p, shortest) == p)) {
           shortest = p;
         }
       }
-      // Basicamente Encontrar el proceso con el menor tiempo de burst  para continuar;
-      os.cpu.addProcess(shortest);
+
+      os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, shortest);
       processes.remove(shortest);
-      addContextSwitch();
     }
   }
 
