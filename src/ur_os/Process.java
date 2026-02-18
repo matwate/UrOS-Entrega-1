@@ -196,10 +196,6 @@ public class Process implements Comparable {
   }
 
   public int getBurstTime() {
-    return pbl.getTotalExecutionTime(); // Usa un método adecuado de ProcessBurstList
-  }
-
-  public int getRemainingCPUTime() {
     return pbl.getRemainingCPUTime();
   }
 

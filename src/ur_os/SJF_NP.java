@@ -20,8 +20,8 @@ public class SJF_NP extends Scheduler {
 
       // Find the process with the shortest remaining CPU time
       for (Process p : processes) {
-        int pRemaining = p.getRemainingCPUTime();
-        int shortestRemaining = shortest.getRemainingCPUTime();
+        int pRemaining = p.getRemainingTimeInCurrentBurst();
+        int shortestRemaining = shortest.getRemainingTimeInCurrentBurst();
 
         if (pRemaining < shortestRemaining
             || (pRemaining == shortestRemaining && tieBreaker(p, shortest) == p)) {
