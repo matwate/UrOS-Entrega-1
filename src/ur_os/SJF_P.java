@@ -12,30 +12,51 @@ import java.util.List;
  *
  * @author prestamour
  */
-public class SJF_P extends Scheduler{
+public class SJF_P extends Scheduler {
 
-    
-    SJF_P(OS os){
+    SJF_P(OS os) {
         super(os);
+    }
 
+    @Override
+    public void newProcess(boolean cpuEmpty) {
+        if (!cpuEmpty) {
+            os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, null);
+            addContextSwitch(); // <-- CPU process switched due to preemption
+        }
+    }
+
+    @Override
+    public void IOReturningProcess(boolean cpuEmpty) {
+            if (!cpuEmpty) {
+                os.interrupt(InterruptType.SCHEDULER_CPU_TO_RQ, null);
+                addContextSwitch(); // <-- CPU process switched due to preemption
+            }
     }
     
-    @Override
-    public void newProcess(boolean cpuEmpty){// When a NEW process enters the queue, process in CPU, if any, is extracted to compete with the rest
-        
-    } 
-
-    @Override
-    public void IOReturningProcess(boolean cpuEmpty){// When a process return from IO and enters the queue, process in CPU, if any, is extracted to compete with the rest
-        
-    } 
     
-   
+
     @Override
     public void getNext(boolean cpuEmpty) {
-        
-        //Insert code here
+        if (!processes.isEmpty() && cpuEmpty) {
+            Process shortest = null;
 
-     }
- 
+            for (Process p : processes) {
+                if (shortest == null) {
+                    shortest = p;
+                } else if (p.getRemainingTimeInCurrentBurst() < shortest.getRemainingTimeInCurrentBurst()) {
+                    shortest = p;
+                } else if (p.getRemainingTimeInCurrentBurst() == shortest.getRemainingTimeInCurrentBurst()) {
+                    shortest = tieBreaker(shortest, p);
+                }
+            }
+
+            if (shortest != null) {
+                processes.remove(shortest);
+                os.interrupt(InterruptType.SCHEDULER_RQ_TO_CPU, shortest);
+                addContextSwitch();  // <-- Count the context switch here
+            }
+        }
+    }
+
 }
