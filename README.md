@@ -1,5 +1,9 @@
 # UR-OS Process Scheduling Simulator in Java
 
+## NOTA IMPORTANTE
+
+Esta version esta modificadda para tener context switches centralizados cuando se hace el interrupt RQ_TO_CPU
+
 ## Overview
 
 The UR-OS simulator is a Java-based application designed to include all the main active components of a computer system in order to replicate the behavior of an operating system and its interaction with hardware elements such as the processor, memory, and file system.
