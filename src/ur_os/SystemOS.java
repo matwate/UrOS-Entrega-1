@@ -436,7 +436,6 @@ public final class SystemOS implements Runnable {
     System.out.println(
         "Average Turnaround Time: " + this.calcTurnaroundTime() + " cycles / process");
     System.out.println("Average Waiting Time: " + this.calcAvgWaitingTime());
-    System.out.println("Average Context Switches (solo Gantt): " + this.calcAvgContextSwitches());
     System.out.println("Average Context Switches (completo): " + this.calcAvgContextSwitches2());
     System.out.println("Average Response Time: " + this.calcResponseTime());
 
@@ -497,8 +496,34 @@ public final class SystemOS implements Runnable {
   }
 
   public double calcAvgContextSwitches2() {
+    if (execution.isEmpty() || processes.isEmpty()) return 0;
 
-    return 0;
+    int finishedProcesses = getFinishedProcesses();
+    if (finishedProcesses == 0) return 0;
+
+    int contextSwitches = 0;
+    int lastPid = Integer.MIN_VALUE;
+
+    for (Integer currentPid : execution) {
+      if (currentPid != lastPid && currentPid >= 0) {
+        contextSwitches++;
+      }
+      lastPid = currentPid;
+    }
+
+    return (double) contextSwitches / finishedProcesses;
+  }
+
+  public int getFinishedProcesses() {
+    if (processes.isEmpty()) return 0;
+
+    int finished = 0;
+
+    for (Process p : processes) {
+      if (p.getTime_finished() != -1) finished++;
+    }
+
+    return finished;
   }
 
   public double calcResponseTime() {
